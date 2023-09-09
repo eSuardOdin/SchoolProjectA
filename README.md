@@ -68,6 +68,22 @@ class Moni {
 		-AddBankAccount() BankAccount
 		-AddTransaction() Transaction
 		}
-		Moni  "1" --> "1..*" BankAccount
+class Transaction {
+	-int Amount
+	-String Label
+	-Date TransactionDate	
+}
+class Tag {
+	-String Label
+	-String Description
+}
+class Transaction_Tag {
+	
+}
+Moni  "1" --> "1..*" BankAccount
+BankAccount "0..*" --> "1" Transaction
+Moni "1" --> "1..*" Tag
+Tag "1" ..> "0..*" Transaction_Tag
+Transaction "1" ..> "0..*" Transaction_Tag
 		
 ```
