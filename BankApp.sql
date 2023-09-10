@@ -60,3 +60,19 @@ END;
 //
 DELIMITER ;
 -- DONE AND VALID UP TO THIS POINT
+
+DELIMITER //
+CREATE TRIGGER Transaction_Delete BEFORE DELETE ON Transactions
+FOR EACH ROW
+BEGIN
+    UPDATE BankAccounts 
+    SET BankAccountBalance = 
+    (
+        SELECT BankAccountBalance
+        FROM BankAccounts
+        WHERE BankAccountId = OLD.BankAccountId
+    ) - OLD.TransactionAmount
+    WHERE BankAccountId = OLD.BankAccountId;
+END;
+//
+DELIMITER ;
