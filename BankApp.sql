@@ -43,4 +43,20 @@ CREATE TABLE Transactions (
     FOREIGN KEY(BankAccountId) REFERENCES BankAccounts(BankAccountId)
 );
 
+
+DELIMITER //
+CREATE TRIGGER Transaction_Insert AFTER INSERT ON Transactions
+FOR EACH ROW
+BEGIN
+    UPDATE BankAccounts 
+    SET BankAccountBalance = 
+    (
+        SELECT BankAccountBalance
+        FROM BankAccounts
+        WHERE BankAccountId = NEW.BankAccountId
+    ) + NEW.TransactionAmount
+    WHERE BankAccountId = NEW.BankAccountId;
+END;
+//
+DELIMITER ;
 -- DONE AND VALID UP TO THIS POINT
