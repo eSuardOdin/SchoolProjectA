@@ -59,7 +59,6 @@ BEGIN
 END;
 //
 DELIMITER ;
--- DONE AND VALID UP TO THIS POINT
 
 DELIMITER //
 CREATE TRIGGER Transaction_Delete BEFORE DELETE ON Transactions
@@ -76,3 +75,44 @@ BEGIN
 END;
 //
 DELIMITER ;
+
+DELIMITER //
+CREATE TRIGGER Transaction_Update BEFORE UPDATE ON Transactions
+FOR EACH ROW
+BEGIN
+    IF OLD.TransactionAmount != NEW.TransactionAmount THEN
+        UPDATE BankAccounts 
+        SET BankAccountBalance = 
+        (
+            SELECT BankAccountBalance
+            FROM BankAccounts
+            WHERE BankAccountId = OLD.BankAccountId
+        ) - OLD.TransactionAmount + NEW.TransactionAmount
+        WHERE BankAccountId = OLD.BankAccountId;
+    END IF;
+END;
+//
+DELIMITER ;
+
+
+
+
+-- DONE AND VALID UP TO THIS POINT
+
+
+
+
+-- Créez une contrainte d'intégrité pour vérifier que chaque Tag associé à une Transaction
+-- correspond bien à l'utilisateur faisant la Transaction.
+ALTER TABLE Transactions
+ADD CONSTRAINT CHK_Tag_User
+CHECK (EXISTS (
+    SELECT 1
+    FROM Tags AS t
+    WHERE t.TagID = Transactions.TagID
+    AND t.UserID = (
+        SELECT UserID
+        FROM Accounts AS a
+        WHERE a.AccountID = Transactions.AccountID
+    )
+));
