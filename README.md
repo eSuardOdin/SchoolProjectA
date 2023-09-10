@@ -48,6 +48,17 @@ Les Tag sont des balises créées par l'utilisateur pour trier leurs transaction
 
 L'entité avec laquelle on fera le plus de traitement, cette entité contient un Label, une Description, un Amount, une TransactionDate. Elle est la propriété d'un BankAccount. Quand un utilisateur en rajoute une, le BankAccount associé voit son attribut Balance évoluer.
 
+**ATTENTION**: Je pense gérer l'évolution du solde du compte associé par un trigger à l'insertion d'un transaction dans la base de données.
+Cela me permettra :
+- Plus de cohérence en terme d'intégrité de la donnée, quelle que soit la source de l'insertion.
+- Simplification du code applicatif.
+- Sécurité et maintenabilité (la mise à jour du solde sera centralisée)
+
+Au détriment de :
+- L'évolutivité -> Une insertion d'une transaction aura toujours le même effet sur le solde d'un compte (Tant mieux, c'est voulu).
+- La visibilité -> Il faudra bien documenter le fait que cette composante est prise en charge dans la base de données.
+	
+
 
 ----------------------------------------------
 
