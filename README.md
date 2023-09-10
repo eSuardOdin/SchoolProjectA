@@ -98,3 +98,7 @@ Tag "1" ..> "0..*" Transaction_Tag
 Transaction "1" ..> "0..*" Transaction_Tag
 		
 ```
+
+
+## TODO :
+Ajouter une contrainte sur la table Transactions_Tags pour vérifier que la Transaction et le Tag viennent bien du même utilisateur.
