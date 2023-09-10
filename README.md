@@ -58,7 +58,7 @@ Au détriment de :
 - L'évolutivité -> Une insertion d'une transaction aura toujours le même effet sur le solde d'un compte (Tant mieux, c'est voulu).
 - La visibilité -> Il faudra bien documenter le fait que cette composante est prise en charge dans la base de données.
 	
-
+Je suis aussi "obligé" de partir du principe qu'un utilisateur ne peut pas modifier le compte auquel appartient une transaction car plus compliqué à gérer avec TRIGGER.
 
 ----------------------------------------------
 
@@ -104,5 +104,5 @@ Transaction "1" ..> "0..*" Transaction_Tag
 
 - [ ] Ajouter une contrainte sur la table Transactions_Tags pour vérifier que la Transaction et le Tag viennent bien du même utilisateur.
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction inserée
-- [ ] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction supprimée 
-- [ ] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction modifiée 
+- [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction supprimée 
+- [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction modifiée 
