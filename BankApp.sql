@@ -11,35 +11,35 @@ CREATE TABLE Monis (
     MoniLogin   VARCHAR(32) UNIQUE NOT NULL,
     MoniPwd     VARCHAR(64) NOT NULL,
     FirstName   VARCHAR(32) NOT NULL,
-    LastName    VARCHAR(32) NOT NULL,
+    LastName    VARCHAR(32) NOT NULL
 );
 
 CREATE INDEX idx_MoniLogin ON Monis (MoniLogin);
 
 CREATE TABLE BankAccounts (
-    BankAccountId 	    INTEGER PRIMARY KEY AUTO_INCREMENT,
-    BankAccountLabel 	VARCHAR(128) NOT NULL,
-    BankAccountBalance 	DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-    MoniId 		        INTEGER NOT NULL,
+    BankAccountId INTEGER PRIMARY KEY AUTO_INCREMENT,
+    BankAccountLabel VARCHAR(128) NOT NULL,
+    BankAccountBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+    MoniId INTEGER NOT NULL,
     FOREIGN KEY (MoniId) REFERENCES Monis (MoniId)
 );
 
 
 CREATE TABLE Tags (
-    TagId           INTEGER PRIMARY KEY AUTO_INCREMENT,
-    TagLabel        VARCHAR(32) NOT NULL,
-    TagDescription  VARCHAR(512),
-    MoniId          INTEGER NOT NULL,
+    TagId INTEGER PRIMARY KEY AUTO_INCREMENT,
+    TagLabel VARCHAR(32) NOT NULL,
+    TagDescription VARCHAR(512),
+    MoniId INTEGER NOT NULL,
     FOREIGN KEY (MoniId) REFERENCES Monis (MoniId)
 );
 
 CREATE TABLE Transactions (
-    TransactionId           INTEGER PRIMARY KEY AUTO_INCREMENT, 
-    BankAccountId           INTEGER NOT NULL, 
-    TransactionAmount       DECIMAL(10,2) NOT NULL, 
-    TransactionDate         DATE NOT NULL, 
-    TransactionLabel        VARCHAR(128) NOT NULL, 
-    TransactionDescription  VARCHAR(512), 
+    TransactionId INTEGER PRIMARY KEY AUTO_INCREMENT, 
+    BankAccountId INTEGER NOT NULL, 
+    TransactionAmount DECIMAL(10,2) NOT NULL, 
+    TransactionDate DATE NOT NULL, 
+    TransactionLabel VARCHAR(128) NOT NULL, 
+    TransactionDescription VARCHAR(512), 
     FOREIGN KEY(BankAccountId) REFERENCES BankAccounts(BankAccountId)
 );
 
