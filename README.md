@@ -119,8 +119,8 @@ TAGS_TRANSACTIONS(<u>#TransactionId, #TagId</u>)
 
 ## TODO :
 
-- [ ] Ajouter la table ManyToMany TAGS_TRANSACTIONS
-- [ ] Ajouter la deletion ON CASCADE
+- [X] Ajouter la table ManyToMany TAGS_TRANSACTIONS
+- [X] Ajouter la deletion ON CASCADE
 - [ ] Ajouter une contrainte sur la table Transactions_Tags pour vérifier que la Transaction et le Tag viennent bien du même utilisateur.
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction inserée
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction supprimée 
