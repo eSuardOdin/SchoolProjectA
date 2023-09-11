@@ -99,10 +99,33 @@ Transaction "1" ..> "0..*" Transaction_Tag
 		
 ```
 
+### MLD :
+MONIS (<u>MoniId</u>, MoniLogin, MoniPwd, FirstName, LastName)
+    - MoniId est la clé primaire
+BANKACCOUNTS (<u>BankAccountId</u>, BankAccountLabel, BankAccountBalance, #MoniId)
+    - BankAccount est la clé primaire
+    - MoniId est une clé primaire de MONIS
+TAGS (<u>TagId</u>, TagLabel, TagDescription, #MoniId)
+    - TagId est la clé primaire
+    - MoniId est une clé étrangère de MONIS
+TRANSACTIONS (<u>TransactionId</u>, TransactionAmount, TransactionDate, TransactionLabel, TransactionDescription, #BankAccountId)
+    - TransactionId est la clé primaire
+    - BankAccountId est une clé étrangère de BANKACCOUNTS
+TAGS_TRANSACTIONS(<u>#TransactionId, #TagId</u>)
+    - Le couple (TransactionId, TagId) est la clé primaire
+    - TransactionId est une clé étrangère de TRANSACTIONS
+    - TagId est une clé étrangère de TAGS
+
 
 ## TODO :
 
+- [ ] Ajouter la table ManyToMany TAGS_TRANSACTIONS
 - [ ] Ajouter une contrainte sur la table Transactions_Tags pour vérifier que la Transaction et le Tag viennent bien du même utilisateur.
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction inserée
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction supprimée 
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction modifiée 
+
+
+## LINKS :
+- Connexion à la base de données avec EFCore : https://mysqlconnector.net/tutorials/efcore/
+- Documentation MariaDB : https://mariadb.com/kb/en/documentation/
