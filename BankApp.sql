@@ -1,10 +1,8 @@
-DROP TABLE IF EXISTS Monis;
-DROP TABLE IF EXISTS BankAccounts;
-DROP TABLE IF EXISTS Tags;
-DROP TABLE IF EXISTS Transactions;
 DROP TABLE IF EXISTS Tags_Transactions;
-
-
+DROP TABLE IF EXISTS Transactions;
+DROP TABLE IF EXISTS Tags;
+DROP TABLE IF EXISTS BankAccounts;
+DROP TABLE IF EXISTS Monis;
 
 CREATE TABLE Monis (
     MoniId      INTEGER PRIMARY KEY AUTO_INCREMENT,
@@ -12,7 +10,7 @@ CREATE TABLE Monis (
     MoniPwd     VARCHAR(64) NOT NULL,
     FirstName   VARCHAR(32) NOT NULL,
     LastName    VARCHAR(32) NOT NULL
-);
+) ENGINE = InnoDB;
 
 CREATE INDEX idx_MoniLogin ON Monis (MoniLogin);
 
@@ -21,17 +19,20 @@ CREATE TABLE BankAccounts (
     BankAccountLabel VARCHAR(128) NOT NULL,
     BankAccountBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00,
     MoniId INTEGER NOT NULL,
-    FOREIGN KEY (MoniId) REFERENCES Monis (MoniId)
-);
-
+    CONSTRAINT fk_bankaccounts_monis
+        FOREIGN KEY (MoniId) REFERENCES Monis (MoniId)
+        ON DELETE CASCADE
+) ENGINE = InnoDB;
 
 CREATE TABLE Tags (
     TagId INTEGER PRIMARY KEY AUTO_INCREMENT,
     TagLabel VARCHAR(32) NOT NULL,
     TagDescription VARCHAR(512),
     MoniId INTEGER NOT NULL,
-    FOREIGN KEY (MoniId) REFERENCES Monis (MoniId)
-);
+    CONSTRAINT fk_tags_monis
+        FOREIGN KEY (MoniId) REFERENCES Monis (MoniId)
+        ON DELETE CASCADE 
+) ENGINE = InnoDB;
 
 CREATE TABLE Transactions (
     TransactionId INTEGER PRIMARY KEY AUTO_INCREMENT, 
@@ -39,10 +40,23 @@ CREATE TABLE Transactions (
     TransactionAmount DECIMAL(10,2) NOT NULL, 
     TransactionDate DATE NOT NULL, 
     TransactionLabel VARCHAR(128) NOT NULL, 
-    TransactionDescription VARCHAR(512), 
-    FOREIGN KEY(BankAccountId) REFERENCES BankAccounts(BankAccountId)
-);
+    TransactionDescription VARCHAR(512),
+    CONSTRAINT fk_transactions_bankaccounts
+        FOREIGN KEY(BankAccountId) REFERENCES BankAccounts(BankAccountId)
+        ON DELETE CASCADE
+)ENGINE = InnoDB;
 
+CREATE TABLE Tags_Transactions (
+    TransactionId INTEGER NOT NULL,
+    TagId INTEGER NOT NULL,
+    PRIMARY KEY (TransactionId, TagId),
+    CONSTRAINT fk_tags_transactions_tags
+        FOREIGN KEY (TransactionId) REFERENCES Transactions(TransactionId)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_tags_transactions_transactions
+        FOREIGN KEY (TagId) REFERENCES Tags(TagId)
+        ON DELETE CASCADE
+)ENGINE = InnoDB;
 
 DELIMITER //
 CREATE TRIGGER Transaction_Insert AFTER INSERT ON Transactions
