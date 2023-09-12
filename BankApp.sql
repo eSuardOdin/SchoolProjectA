@@ -109,6 +109,32 @@ END;
 DELIMITER ;
 
 
+DELIMITER //
+CREATE TRIGGER Check_Tag_Moni BEFORE INSERT ON Tags_Transactions
+FOR EACH ROW
+BEGIN
+    IF (
+        SELECT COUNT(*)
+        FROM Tags AS t
+        WHERE t.TagId = New.TagId
+        AND t.MoniId = (
+            SELECT MoniId FROM BankAccounts AS b
+            WHERE b.BankAccountId = (
+                SELECT BankAccountId FROM Transactions
+                WHERE Transactions.TransactionId = NEW.TransactionId
+            )
+        )  
+    ) = 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'The selected Tag does not belong to the Transaction owner'; 
+    END IF;
+
+END;
+//
+DELIMITER ;
+
+
+
 
 
 -- DONE AND VALID UP TO THIS POINT
@@ -116,17 +142,24 @@ DELIMITER ;
 
 
 
--- Créez une contrainte d'intégrité pour vérifier que chaque Tag associé à une Transaction
--- correspond bien à l'utilisateur faisant la Transaction.
-ALTER TABLE Transactions
-ADD CONSTRAINT CHK_Tag_User
-CHECK (EXISTS (
-    SELECT 1
-    FROM Tags AS t
-    WHERE t.TagID = Transactions.TagID
-    AND t.UserID = (
-        SELECT UserID
-        FROM Accounts AS a
-        WHERE a.AccountID = Transactions.AccountID
+
+-- STILL NOT WORKING
+ALTER TABLE Tags_Transactions
+ADD CONSTRAINT Check_Tag_Moni
+CHECK( 
+    EXISTS(
+        SELECT 1
+        FROM Tags as t
+        WHERE t.TagId = Tags_Transactions.TagId 
+        AND t.MoniId = (
+            SELECT MoniId FROM BankAccounts AS b
+            WHERE b.BankAccountId = (
+                SELECT BankAccountId FROM Transactions
+                WHERE Transactions.TransactionId = Tags_Transactions.TransactionId
+            )
+        )   
     )
-));
+);
+
+
+
