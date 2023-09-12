@@ -155,3 +155,19 @@ INSERT INTO BankAccounts(BankAccountLabel, BankAccountBalance, MoniId) VALUES
 ('Compte epargne Erwann', 10.00, 1),
 ('Compte courant Florence', 0.00, 2),
 ('Compte pro Florence', 150.00, 2);
+
+INSERT INTO Transactions(TransactionLabel, TransactionDescription, TransactionDate, TransactionAmount, BankAccountId) VALUES
+('Transaction A-B courant Erwann', 'Transaction Compte courant Erwann lié à Tag A et B', '2023-09-15', 40.50, 1),
+('Transaction A epargne Erwann', 'Transaction Compte epargne Erwann lié à Tag A', '2023-09-12', 5.75, 2),
+('Transaction B courant Erwann', 'Transaction Compte courant Erwann lié à Tag B', '2023-08-06', -80.10, 1),
+('Transaction B pro Florence', 'Transaction Compte pro Florence lié à Tag B', '2023-08-06', 37.90, 4),
+('Transaction A pro Florence', 'Transaction Compte pro Florence lié à Tag A', '2023-05-18', -54.25, 4),
+('Transaction A-B courant Florence', 'Transaction Compte courant Florence lié à Tag A et B', '2023-10-06', -80.10, 3);
+
+INSERT INTO Tags_Transactions(TagId, TransactionId) VALUES
+(1, 1), (2, 1),
+(1, 2),
+(2, 3),
+(4, 4),
+(3, 5),
+(3, 6), (4, 6);
