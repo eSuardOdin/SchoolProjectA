@@ -140,26 +140,18 @@ DELIMITER ;
 -- DONE AND VALID UP TO THIS POINT
 
 
+INSERT INTO Monis(MoniLogin, MoniPwd, FirstName, LastName) VALUES
+('wan34', '1234', 'Erwann', 'Suard'),
+('floflo', 'password', 'Florence', 'Chanoni');
 
+INSERT INTO Tags(TagLabel, TagDescription, MoniId) VALUES
+('Tag Erwann A', 'Premier Tag Erwann', 1),
+('Tag Erwann B', 'Deuxieme Tag Erwann', 1),
+('Tag Florence A', 'Premier Tag Florence', 2),
+('Tag Florence B', 'Deuxieme Tag Florence', 2);
 
-
--- STILL NOT WORKING
-ALTER TABLE Tags_Transactions
-ADD CONSTRAINT Check_Tag_Moni
-CHECK( 
-    EXISTS(
-        SELECT 1
-        FROM Tags as t
-        WHERE t.TagId = Tags_Transactions.TagId 
-        AND t.MoniId = (
-            SELECT MoniId FROM BankAccounts AS b
-            WHERE b.BankAccountId = (
-                SELECT BankAccountId FROM Transactions
-                WHERE Transactions.TransactionId = Tags_Transactions.TransactionId
-            )
-        )   
-    )
-);
-
-
-
+INSERT INTO BankAccounts(BankAccountLabel, BankAccountBalance, MoniId) VALUES
+('Compte courant Erwann', -250.50, 1),
+('Compte epargne Erwann', 10.00, 1),
+('Compte courant Florence', 0.00, 2),
+('Compte pro Florence', 150.00, 2);
