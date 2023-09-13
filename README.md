@@ -130,3 +130,4 @@ TAGS_TRANSACTIONS(<u>#TransactionId, #TagId</u>)
 ## LINKS :
 - Connexion à la base de données avec EFCore : https://mysqlconnector.net/tutorials/efcore/
 - Documentation MariaDB : https://mariadb.com/kb/en/documentation/
+- IMPORTANT -> Doc ADO.NET : https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/
