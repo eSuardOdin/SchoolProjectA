@@ -125,9 +125,21 @@ TAGS_TRANSACTIONS(<u>#TransactionId, #TagId</u>)
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction inserée
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction supprimée 
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction modifiée 
+- [ ] Utiliser le Secret Manager tool : https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=linux#secret-manager
 
 
 ## LINKS :
 - Connexion à la base de données avec EFCore : https://mysqlconnector.net/tutorials/efcore/
 - Documentation MariaDB : https://mariadb.com/kb/en/documentation/
 - IMPORTANT -> Doc ADO.NET : https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/
+
+## OUTILS :
+### Utilisation de EFCore :
+Je vais dans le sens BDD -> Code (reverse engineering)
+- Etape 1 : Ajouter le package de database provider au projet(pour les differents db providers : https://learn.microsoft.com/en-us/ef/core/providers/?tabs=dotnet-core-cli)
+
+- Etape 2 : Scaffolding -> On ajoute le package Microsoft.EntityFrameworkCore.Design dans le project
+
+- Etape 3 : La commande de scaffolding a besoin de 2 arguments -> la connection string et le database provider
+
+```dotnet ef dbcontext scaffold 'Server=localhost;User=wan;Password=pswd;Database=MoniWatchI' Pomelo.EntityFrameworkCore.MySql```
