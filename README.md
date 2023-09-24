@@ -143,3 +143,5 @@ Je vais dans le sens BDD -> Code (reverse engineering)
 - Etape 3 : La commande de scaffolding a besoin de 2 arguments -> la connection string et le database provider
 
 ```dotnet ef dbcontext scaffold 'Server=localhost;User=wan;Password=pswd;Database=MoniWatchI' Pomelo.EntityFrameworkCore.MySql```
+
+- Etape 4 : Création de l'API avec : https://learn.microsoft.com/fr-fr/aspnet/core/tutorials/first-web-api?view=aspnetcore-7.0&tabs=visual-studio-code
