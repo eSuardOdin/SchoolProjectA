@@ -8,10 +8,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.11" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.11">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <Using Include="BCrypt.Net.BCrypt" Alias="BcryptNet" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-    <ProjectReference Include="../TestEFCoreMySql/TestEFCoreMySql.csproj" />
+    <ProjectReference Include="../MoniWatchI.EF/MoniWatchI.EF.csproj" />
   </ItemGroup>
 
 </Project>
