@@ -16,7 +16,6 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <Using Include="BCrypt.Net.BCrypt" Alias="BcryptNet" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
-    <ProjectReference Include="../MoniWatchI.EF/MoniWatchI.EF.csproj" />
   </ItemGroup>
 
 </Project>

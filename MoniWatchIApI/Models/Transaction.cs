@@ -11,7 +11,7 @@ public partial class Transaction
 
     public decimal TransactionAmount { get; set; }
 
-    public DateOnly TransactionDate { get; set; }
+    public DateTime TransactionDate { get; set; }
 
     public string TransactionLabel { get; set; } = null!;
 
