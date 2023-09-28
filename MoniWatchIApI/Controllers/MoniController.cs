@@ -154,4 +154,22 @@ public class MoniController : ControllerBase
         }
     }
 
+    // o------------------o
+    // | GET ALL ACCOUNTS |
+    // o------------------o
+    /// <summary>
+    /// Get all accounts from user with URL: /root/moni/{id}/accounts</br>
+    /// </summary>
+    /// <param name="moniId">The id of account's owner</param>
+    /// <returns>An array of accounts</returns>
+    [HttpGet]
+    [Route("{moniId}/accounts")]
+    public async Task<IEnumerable<BankAccount>> GetAllAccounts(int? moniId)
+    {
+        using (MoniWatchIContext db = new())
+        {
+            return !moniId.HasValue ? await db.BankAccounts.ToArrayAsync() : await db.BankAccounts.Where(a => a.MoniId == moniId).ToArrayAsync();
+        }
+    }
+
 }

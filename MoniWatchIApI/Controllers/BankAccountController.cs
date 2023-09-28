@@ -17,27 +17,6 @@ public class AccountController : ControllerBase
         _logger = logger;
     }
 
-
-    // o------------------o
-    // | GET ALL ACCOUNTS |
-    // o------------------o
-    /// <summary>
-    /// Get all accounts in DB with URL: /root/account/GetAllAccounts</br>
-    /// Or all accounts from a specific user with URL: /root/account/GetAllAccounts?MoniId={id}
-    /// </summary>
-    /// <param name="moniId">If specified, the id of account's owner</param>
-    /// <returns>An array of accounts</returns>
-    [HttpGet]
-    [Route("GetAllAccounts")]
-    public async Task<IEnumerable<BankAccount>> GetAllAccounts(int? moniId)
-    {
-        using (MoniWatchIContext db = new())
-        {
-            return !moniId.HasValue ? await db.BankAccounts.ToArrayAsync() : await db.BankAccounts.Where(a => a.MoniId == moniId).ToArrayAsync();
-        }
-    }
-
-
     // o--------------------o
     // | GET UNIQUE ACCOUNT |
     // o--------------------o
@@ -47,7 +26,7 @@ public class AccountController : ControllerBase
     /// <param name="accountId">The id of the account to find</param>
     /// <returns>A status code</returns>
     [HttpGet]
-    [Route("GetAccount")]
+    [Route("{accountId}")]
     public async Task<ActionResult<BankAccount>> GetAccount(int accountId)
     {
         using (MoniWatchIContext db = new())
@@ -75,7 +54,6 @@ public class AccountController : ControllerBase
     /// <param name="account">The account to add (specified as JSON, translated by EF Core)</param>
     /// <returns>A status code</returns>
     [HttpPost]
-    [Route("PostAccount")]
     public async Task<ActionResult<BankAccount>> PostAccount([FromBody] BankAccount account)
     {
         using (MoniWatchIContext db = new())
@@ -92,7 +70,7 @@ public class AccountController : ControllerBase
     // | DELETE ACCOUNT |
     // o----------------o
     [HttpDelete]
-    [Route("DeleteAccount")]
+    [Route("{accountId}")]
     public async Task<ActionResult> DeleteAccount(int accountId)
     {
         using (MoniWatchIContext db = new())
@@ -114,7 +92,7 @@ public class AccountController : ControllerBase
     // | PATCH ACCOUNT |
     // o---------------o
     [HttpPatch]
-    [Route("UpdateAccountName")]
+    [Route("{accountId}")]
     public async Task<ActionResult<Transaction>> UpdateAccountName(string accountLabel, int accountId)
     {
         using (MoniWatchIContext db = new())
