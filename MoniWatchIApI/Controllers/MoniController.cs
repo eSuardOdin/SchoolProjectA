@@ -131,4 +131,27 @@ public class MoniController : ControllerBase
         }
     }
 
+
+//-------------------------------------------------------------------------------------------------------
+    // OWNED OBJECTS
+
+    // o--------------o
+    // | GET ALL TAGS |
+    // o--------------o
+    /// <summary>
+    /// Get all tags for a specific user with URL: /root/moni/{id}/tags</br>
+    /// Or all tags with URL: /root/tag/GetAllTags
+    /// </summary>
+    /// <param name="moniId">The id of tag's owner</param>
+    /// <returns>An array of tags</returns>
+    [HttpGet]
+    [Route("{moniId}/tags")]
+    public async Task<IEnumerable<Tag>> GetAllTags(int moniId)
+    {
+        using(MoniWatchIContext db = new())
+        {
+            return await db.Tags.Where(t => t.MoniId == moniId).ToArrayAsync();
+        }
+    }
+
 }
