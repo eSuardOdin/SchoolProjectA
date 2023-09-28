@@ -85,30 +85,11 @@ public class MoniController : ControllerBase
         } 
     }
 
-    // o-------------------o
-    // | UPDATE MONI LOGIN |
-    // o-------------------o
-    // [HttpPatch]
-    // [Route("UpdateMoniLogin")]
-    // public async Task<ActionResult<Moni>> UpdateMoniLogin(int moniId, string moniLogin)
-    // {
-    //     using (MoniWatchIContext db = new())
-    //     {
-    //         Moni moni = await db.Monis.FindAsync(moniId);
-    //         if (moni is null)
-    //         {
-    //             return BadRequest("Moni not found");
-    //         }
-    //         moni.MoniLogin = moniLogin;
-    //         await db.SaveChangesAsync();
-    //         return Ok($"Moni login successfully updated: {moni.MoniLogin}");
-    //     }
-    // }
 
 
-    // o-----------------o
-    // | UPDATE MONI PWD |
-    // o-----------------o
+    // o-------------o
+    // | UPDATE MONI |
+    // o-------------o
     [HttpPatch]
     [Route("{moniId}")]
     public async Task<ActionResult<Moni>> UpdateMoniPwd(int moniId, [FromBody]MoniPatchModel moniPatch)
