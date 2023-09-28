@@ -19,7 +19,6 @@ public class MoniController : ControllerBase
     // | GET ALL Monis |
     // o----------------o
     [HttpGet]
-    [Route("GetAllMonis")]
     public async Task<IEnumerable<Moni>> GetAllMonis()
     {
         using(MoniWatchIContext db = new()) return await db.Monis.ToArrayAsync();
@@ -32,14 +31,14 @@ public class MoniController : ControllerBase
     // o----------o
     /// <summary>
     /// Returns a Moni with matching login and password</br>
-    /// Route URL: /root/moni/GetMoni?moniLogin={login}&moniPwd={pwd}
+    /// Route URL: /root/moni/{login}?moniPwd={pwd}
     /// </summary>
     /// <param name="moniLogin">The Login to search in db</param>
     /// <param name="moniPwd">Password that will be tested against hashed password in db</param>
     /// <returns>Not found or moni object</returns>
     [HttpGet]
-    [Route("GetMoni")]
-    public async Task<ActionResult<Moni>> GetMoni(string moniLogin, string moniPwd)
+    [Route("{moniLogin}")]
+    public async Task<ActionResult<Moni>> GetMoni(string moniPwd, string moniLogin)
     {
         using (MoniWatchIContext db = new())
         {
