@@ -126,6 +126,8 @@ TAGS_TRANSACTIONS(<u>#TransactionId, #TagId</u>)
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction supprimée 
 - [X] Ajouter le TRIGGER modifiant le BankAccount.Balance associé à une Transaction modifiée 
 - [ ] Utiliser le Secret Manager tool : https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=linux#secret-manager
+- [ ] Travailler sur le controller de transactions (le clean et repenser les routes)
+- [ ] Possiblement, travailler sur un tri de transaction par plusieurs tags avec TagA && TagB
 
 
 ## LINKS :

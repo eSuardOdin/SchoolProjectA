@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers().AddJsonOptions(x => 
-x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 builder.Services.AddDbContext<MoniWatchIContext>();
 
 builder.Services.AddEndpointsApiExplorer();
