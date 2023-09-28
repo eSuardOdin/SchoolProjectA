@@ -37,14 +37,12 @@ public class MoniController : ControllerBase
     /// <param name="moniPwd">Password that will be tested against hashed password in db</param>
     /// <returns>Not found or moni object</returns>
     [HttpGet]
-    [Route("{moniLogin}")]
-    public async Task<ActionResult<Moni>> GetMoni(string moniPwd, string moniLogin)
+    [Route("{moniId}")]
+    public async Task<ActionResult<Moni>> GetMoni(string moniPwd, int moniId)
     {
         using (MoniWatchIContext db = new())
         {
-            Moni moni = await db.Monis.Where(
-                m => m.MoniLogin == moniLogin
-            ).FirstOrDefaultAsync();
+            Moni moni = await db.Monis.FindAsync(moniId);
             
             if (moni is null || !BcryptNet.Verify(moniPwd, moni.MoniPwd) /*moniPwd != moni.MoniPwd*/)
             {
@@ -69,7 +67,6 @@ public class MoniController : ControllerBase
     /// <param name="moni">Moni object added, will be passed in request as JSON</param>
     /// <returns>The Moni created</returns>
     [HttpPost]
-    [Route("PostMoni")]
     public async Task<ActionResult<Moni>> PostMoni([FromBody] Moni moni)
     {
         // Pwd encrypt
@@ -91,30 +88,30 @@ public class MoniController : ControllerBase
     // o-------------------o
     // | UPDATE MONI LOGIN |
     // o-------------------o
-    [HttpPatch]
-    [Route("UpdateMoniLogin")]
-    public async Task<ActionResult<Moni>> UpdateMoniLogin(int moniId, string moniLogin)
-    {
-        using (MoniWatchIContext db = new())
-        {
-            Moni moni = await db.Monis.FindAsync(moniId);
-            if (moni is null)
-            {
-                return BadRequest("Moni not found");
-            }
-            moni.MoniLogin = moniLogin;
-            await db.SaveChangesAsync();
-            return Ok($"Moni login successfully updated: {moni.MoniLogin}");
-        }
-    }
+    // [HttpPatch]
+    // [Route("UpdateMoniLogin")]
+    // public async Task<ActionResult<Moni>> UpdateMoniLogin(int moniId, string moniLogin)
+    // {
+    //     using (MoniWatchIContext db = new())
+    //     {
+    //         Moni moni = await db.Monis.FindAsync(moniId);
+    //         if (moni is null)
+    //         {
+    //             return BadRequest("Moni not found");
+    //         }
+    //         moni.MoniLogin = moniLogin;
+    //         await db.SaveChangesAsync();
+    //         return Ok($"Moni login successfully updated: {moni.MoniLogin}");
+    //     }
+    // }
 
 
     // o-----------------o
     // | UPDATE MONI PWD |
     // o-----------------o
     [HttpPatch]
-    [Route("UpdateMoniPwd")]
-    public async Task<ActionResult<Moni>> UpdateMoniPwd(int moniId, string moniPwd)
+    [Route("{moniId}")]
+    public async Task<ActionResult<Moni>> UpdateMoniPwd(int moniId, [FromBody]MoniPatchModel moniPatch)
     {
         using (MoniWatchIContext db = new())
         {
@@ -124,9 +121,11 @@ public class MoniController : ControllerBase
                 return BadRequest("Moni not found");
             }
             // Pwd encrypt
-            moni.MoniPwd = BcryptNet.HashPassword(moniPwd);
+            moni.MoniPwd = BcryptNet.HashPassword(moniPatch.PatchPwd);
+            moni.FirstName = moniPatch.PatchFirstName;
+            moni.LastName = moniPatch.PatchLastName;
             await db.SaveChangesAsync();
-            return Ok($"Moni password successfully updated: {moni.MoniPwd}");
+            return Ok($"Moni successfully updated");
         }
     }
 
@@ -135,7 +134,7 @@ public class MoniController : ControllerBase
     // | DELETE MONI |
     // o-------------o
     [HttpDelete]
-    [Route("DeleteMoni")]
+    [Route("{moniId}")]
     public async Task<ActionResult> DeleteMoni(int moniId)
     {
         using (MoniWatchIContext db = new())
