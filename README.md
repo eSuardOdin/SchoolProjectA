@@ -134,6 +134,7 @@ TAGS_TRANSACTIONS(<u>#TransactionId, #TagId</u>)
 - Connexion à la base de données avec EFCore : https://mysqlconnector.net/tutorials/efcore/
 - Documentation MariaDB : https://mariadb.com/kb/en/documentation/
 - IMPORTANT -> Doc ADO.NET : https://learn.microsoft.com/en-us/dotnet/framework/data/adonet/
+- Pagination -> https://learn.microsoft.com/en-gb/ef/core/querying/pagination (Pour l'instant mon modèle n'en nécessite pas forcement, mais à prévoir en avance car bonne pratique)
 
 ## OUTILS :
 ### Utilisation de EFCore :

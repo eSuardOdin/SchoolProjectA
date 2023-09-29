@@ -14,7 +14,7 @@ API routes :
 - Tags :
   GET	  /tag			-> Return tous les tags *(pas nécessairement utile au fonctionnement de l'app)
   POST 	  /tag			-> Insère le tag fourni en JSON
-  * à faire : supprimer un tag (voir dans ma bdd les cascades)
+  DELETE  /tag/{id} -> Supprime un tag
 
 - Accounts :
   GET  	  /account/{id}		-> Return un account selon son id
@@ -28,9 +28,9 @@ Pas encore fait, je vais peut être migrer les transactions dans /accounts
 * Penser à faire du paging
 
 Actions : 
-	- Récupérer les transactions d'un compte (/account/{id}/transactions)
-	- Récupérer une transaction (/transaction/{id})
-	- Récupérer les transactions comprises dans une période
+	- Récupérer les transactions d'un compte (/account/{id}/transactions) -> Fait
+	- Récupérer une transaction (/transaction/{id}) -> Fait
+	- Récupérer les transactions comprises dans une période (/account/{id}/transactions) + ?begin=YYYYMMDD&end=YYYYMMDD -> Fait
 	- Récupérer les transactions ayant n tags (array d'id des tags en paramètre ?)
 	- Insèrer une transaction
 	- Update une transaction (label, description et montant uniquement, on ne touche pas à l'account lié)
