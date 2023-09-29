@@ -55,7 +55,29 @@ public class TagController : ControllerBase
         {
             db.Add(tag);
             await db.SaveChangesAsync();
-            return Ok();
+            return Ok(tag);
+        }
+    }
+
+
+    // o--------------o
+    // | DELETE A TAG |
+    // o--------------o
+    /// <summary>
+    /// Posts a tag with URL /root/tag/{id}
+    /// </summary>
+    /// <param name="tag">Tag to delete</param>
+    [HttpDelete]
+    [Route("{tagId}")]
+    public async Task<ActionResult> DeleteTag(int tagId)
+    {
+        using(MoniWatchIContext db = new())
+        {
+            Tag tag = await db.Tags.FindAsync(tagId);
+            if(tag is null) return BadRequest("Tag not found");
+            db.Tags.Remove(tag);
+            await db.SaveChangesAsync();
+            return Ok($"Tag '{tag.TagLabel}' deleted");
         }
     }
 }
