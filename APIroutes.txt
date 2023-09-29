@@ -1,0 +1,38 @@
+API routes :
+
+- Moni :
+  GET 	  /moni 	 	-> Return tous les monies *(pas nécessairement utile au fonctionnement de l'app)
+  GET 	  /moni/{id} 		-> Return le moni correspondant à l'id (le password doit être fourni en argument, pas nécessairement utile)
+  POST	  /moni 		-> Insère le moni fourni en JSON
+  PATCH   /moni/{id}		-> Update le moni avec le DTO fourni en argument (Peut update pwd, nom, prénom)
+  DELETE  /moni/{id}		-> Supprime le moni correspondant
+  * Objets enfant *
+  GET	  /moni/{id}/tags 	-> Return tous les tags appartenant au moni	
+  GET	  /moni/{id}/accounts   -> Return tous les comptes appartenant au moni
+
+
+- Tags :
+  GET	  /tag			-> Return tous les tags *(pas nécessairement utile au fonctionnement de l'app)
+  POST 	  /tag			-> Insère le tag fourni en JSON
+  * à faire : supprimer un tag (voir dans ma bdd les cascades)
+
+- Accounts :
+  GET  	  /account/{id}		-> Return un account selon son id
+  POST	  /account		-> Insère l'account fourni en JSON
+  DELETE  /account/{id}		-> Supprime l'account correspondant à l'id
+  PATCH   /account/{id}		-> Update le label de l'account (je ne gère que ça, le balance se mettant à jour par des trigger dans la base)
+
+- Transactions :
+  
+Pas encore fait, je vais peut être migrer les transactions dans /accounts
+* Penser à faire du paging
+
+Actions : 
+	- Récupérer les transactions d'un compte (/account/{id}/transactions)
+	- Récupérer une transaction (/transaction/{id})
+	- Récupérer les transactions comprises dans une période
+	- Récupérer les transactions ayant n tags (array d'id des tags en paramètre ?)
+	- Insèrer une transaction
+	- Update une transaction (label, description et montant uniquement, on ne touche pas à l'account lié)
+	- Update les tags d'une transaction (mis à part ici car peut être plus galère à gèrer)
+	- Delete une transaction (/transaction/{id})
