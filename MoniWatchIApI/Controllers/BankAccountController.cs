@@ -122,14 +122,55 @@ public class AccountController : ControllerBase
     /// <returns>An array of transactions</returns>
     [HttpGet]
     [Route("{accountId}/transactions")]
-    public async Task<ActionResult<Transaction>> GetAccountTransactions(int accountId)
+    public async Task<ActionResult<Transaction>> GetAccountTransactions(int accountId, DateTime? start, DateTime? end, bool asc = true)
     {
         using(MoniWatchIContext db = new())
         {
             if(await db.BankAccounts.FindAsync(accountId) is null) return BadRequest("Account not found");
-            Transaction[] tr = await db.Transactions
-                .Where(transac => transac.BankAccountId == accountId)
-                .ToArrayAsync();
+            Transaction[] tr = null;
+            // If no start date
+            if (start is null)
+            {
+                tr = await db.Transactions
+                    .Where(t => t.BankAccountId == accountId)
+                    .ToArrayAsync();
+            }
+            // If just start date
+            else if(end is null && !(start is null))
+            {
+                if(asc)
+                {
+                    tr = await db.Transactions
+                        .Where(t => t.TransactionDate >= start && t.BankAccountId == accountId)
+                        .OrderBy(t => t.TransactionDate)
+                        .ToArrayAsync();
+                }
+                else
+                {
+                    tr = await db.Transactions
+                        .Where(t => t.TransactionDate >= start && t.BankAccountId == accountId)
+                        .OrderByDescending(t => t.TransactionDate)
+                        .ToArrayAsync();
+                }
+            }
+            // If start and end date
+            else if(!(end is null) && !(start is null))
+            {
+                if(asc)
+                {
+                    tr = await db.Transactions
+                        .Where(t => t.TransactionDate >= start && t.TransactionDate <= end && t.BankAccountId == accountId)
+                        .OrderBy(t => t.TransactionDate)
+                        .ToArrayAsync();
+                }
+                else
+                {
+                    tr = await db.Transactions
+                        .Where(t => t.TransactionDate >= start && t.TransactionDate <= end && t.BankAccountId == accountId)
+                        .OrderByDescending(t => t.TransactionDate)
+                        .ToArrayAsync();
+                }
+            }
             return Ok(tr);
         }
     }
