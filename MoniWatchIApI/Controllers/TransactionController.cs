@@ -17,95 +17,28 @@ public class TransactionController : ControllerBase
         _logger = logger;
     }
 
+    // // o--------------------------------o
+    // // | GET ALL TRANSACTIONS WITH DATE |
+    // // o--------------------------------o
 
-    // o----------------------o
-    // | GET ALL TRANSACTIONS |
-    // o----------------------o
-    /// <summary>
-    /// Get all transactions in DB with URL: /root/transaction/GetAllTransactions</br>
-    /// Or all transactions from a specific user with URL: /root/transaction/GetAllTransactions?accountId={id}
-    /// Or all transactions from a specific tag with URL: /root/transaction/GetAllTransactions?tagId={id}
-    /// </summary>
-    /// <param name="accountId">The account to filter transactions with</param>
-    /// <param name="tagId">The tag to filter transactions with</param>
-    /// <returns>An array of transactions depending on the needs</returns>
     // [HttpGet]
-    // [Route("GetAllTransactions")]
-    // public async Task<IEnumerable<Transaction>> GetAllTransactions(int? accountId, int? tagId)
+    // [Route("GetAllTransactionsWithDate")]
+    // public async Task<IEnumerable<Transaction>> GetAllTransactionsWithDate(int accountId, DateTime startDate, DateTime? endDate, bool isAsc = true)
     // {
     //     using (MoniWatchIContext db = new())
     //     {
-    //         // If we want specific tags for a specific user
-    //         if(accountId.HasValue && tagId.HasValue)
+    //         var all = await db.Transactions.Where(t => t.BankAccountId == accountId).ToArrayAsync();
+    //         if (endDate is null)
     //         {
-    //             return await db.Transactions.Where(t => t.BankAccountId == accountId && t.TagId == tagId).ToArrayAsync();
+    //             return isAsc ? 
+    //                 all.Where(t => t.TransactionDate >= startDate).OrderBy(t => t.TransactionDate) :
+    //                 all.Where(t => t.TransactionDate >= startDate).OrderByDescending(t => t.TransactionDate);
     //         }
-    //         // If we want transactions for a specific user
-    //         else if(accountId.HasValue)
-    //         {
-    //             return await db.Transactions.Where(t => t.BankAccountId == accountId).ToArrayAsync();
-    //         }
-    //         // If we want transactions with a tag but no specific user
-    //         else if(tagId.HasValue)
-    //         {
-    //             return await db.Transactions.Where(t => t.TagId == tagId).ToArrayAsync();
-    //         }
-    //         // If we want ALL transactions
-    //         return await db.Transactions.ToArrayAsync();
+    //         return isAsc ? 
+    //             all.Where(t => t.TransactionDate >= startDate && t.TransactionDate <= endDate).OrderBy(t => t.TransactionDate) :
+    //             all.Where(t => t.TransactionDate >= startDate && t.TransactionDate <= endDate).OrderByDescending(t => t.TransactionDate);
     //     }
     // }
-
-    [HttpGet]
-    [Route("GetAllTransactions")]
-    public IEnumerable<TransactionDto> GetAllTransactions(int? accountId, int? tagId)
-    {
-        using (MoniWatchIContext db = new())
-        {
-            
-            var transactions = db.Transactions
-            .Include(t => t.Tags)
-            .Where(t => t.BankAccountId == accountId)
-            .ToList();
-
-        var transactionDtos = transactions.Select(t => new TransactionDto
-        {
-            TransactionId = t.TransactionId,
-            BankAccountId = t.BankAccountId,
-            TransactionAmount = t.TransactionAmount,
-            TransactionDate = t.TransactionDate,
-            TransactionLabel = t.TransactionLabel,
-            TransactionDescription = t.TransactionDescription,
-            Tags = t.Tags.ToList() // Chargez les tags ici
-        });
-
-        return transactionDtos;
-            
-        }
-    }
-
-
-    // o--------------------------------o
-    // | GET ALL TRANSACTIONS WITH DATE |
-    // o--------------------------------o
-
-    [HttpGet]
-    [Route("GetAllTransactionsWithDate")]
-    public async Task<IEnumerable<Transaction>> GetAllTransactionsWithDate(int accountId, DateTime startDate, DateTime? endDate, bool isAsc = true)
-    {
-        using (MoniWatchIContext db = new())
-        {
-            var all = await db.Transactions.Where(t => t.BankAccountId == accountId).ToArrayAsync();
-            if (endDate is null)
-            {
-                return isAsc ? 
-                    all.Where(t => t.TransactionDate >= startDate).OrderBy(t => t.TransactionDate) :
-                    all.Where(t => t.TransactionDate >= startDate).OrderByDescending(t => t.TransactionDate);
-            }
-            return isAsc ? 
-                all.Where(t => t.TransactionDate >= startDate && t.TransactionDate <= endDate).OrderBy(t => t.TransactionDate) :
-                all.Where(t => t.TransactionDate >= startDate && t.TransactionDate <= endDate).OrderByDescending(t => t.TransactionDate);
-        }
-    }
 
 
     // o------------------------o
@@ -117,7 +50,7 @@ public class TransactionController : ControllerBase
     /// <param name="transactionId">The id of transaction to find</param>
     /// <returns>A status code</returns>
     [HttpGet]
-    [Route("GetTransaction")]
+    [Route("{transactionId}")]
     public async Task<ActionResult<Transaction>> GetTransaction(int transactionId)
     {
         using(MoniWatchIContext db = new())
@@ -125,7 +58,7 @@ public class TransactionController : ControllerBase
             Transaction transaction = await db.Transactions.FindAsync(transactionId);
             if (transaction is null) 
             {
-                return NotFound();
+                return NotFound("Transaction not found");
             }
             else
             {
