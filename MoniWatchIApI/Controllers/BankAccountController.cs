@@ -93,7 +93,7 @@ public class AccountController : ControllerBase
     // o---------------o
     [HttpPatch]
     [Route("{accountId}")]
-    public async Task<ActionResult<Transaction>> UpdateAccountName(string accountLabel, int accountId)
+    public async Task<ActionResult<BankAccount>> UpdateAccountName(string accountLabel, int accountId)
     {
         using (MoniWatchIContext db = new())
         {
@@ -109,5 +109,28 @@ public class AccountController : ControllerBase
         }
     } 
 
+//-------------------------------------------------------------------------------------------------------
+    // OWNED OBJECTS
 
+    // o----------------------o
+    // | GET ALL TRANSACTIONS |
+    // o----------------------o
+    /// <summary>
+    /// Get all transactions in DB with URL: /root/account/{id}/transactions</br>
+    /// </summary>
+    /// <param name="accountId">The account to filter transactions with</param>
+    /// <returns>An array of transactions</returns>
+    [HttpGet]
+    [Route("{accountId}/transactions")]
+    public async Task<ActionResult<Transaction>> GetAccountTransactions(int accountId)
+    {
+        using(MoniWatchIContext db = new())
+        {
+            if(await db.BankAccounts.FindAsync(accountId) is null) return BadRequest("Account not found");
+            Transaction[] tr = await db.Transactions
+                .Where(transac => transac.BankAccountId == accountId)
+                .ToArrayAsync();
+            return Ok(tr);
+        }
+    }
 }
