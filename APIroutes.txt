@@ -32,7 +32,7 @@ Actions :
 	- Récupérer une transaction (/transaction/{id}) -> Fait
 	- Récupérer les transactions comprises dans une période (/account/{id}/transactions) + ?begin=YYYYMMDD&end=YYYYMMDD -> Fait
 	- Récupérer les transactions ayant n tags (array d'id des tags en paramètre ?)
-	- Insèrer une transaction
+	- Insèrer une transaction -> Fait (/transaction + TransactionDTO fourni en argument)
 	- Update une transaction (label, description et montant uniquement, on ne touche pas à l'account lié)
 	- Update les tags d'une transaction (mis à part ici car peut être plus galère à gèrer)
-	- Delete une transaction (/transaction/{id})
+	- Delete une transaction (/transaction/{id}) -> Fait
