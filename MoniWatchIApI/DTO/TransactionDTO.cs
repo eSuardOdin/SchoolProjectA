@@ -7,5 +7,5 @@ public class TransactionDto
     public DateTime TransactionDate { get; set; }
     public string TransactionLabel { get; set; }
     public string TransactionDescription { get; set; }
-    public List<Tag> Tags { get; set; }
+    public int[] Tags { get; set; }
 }

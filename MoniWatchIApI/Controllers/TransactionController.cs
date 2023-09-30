@@ -78,11 +78,25 @@ public class TransactionController : ControllerBase
     /// <param name="transaction">The transaction object to add (as a JSON)</param>
     /// <returns>Created object</returns>
     [HttpPost]
-    [Route("PostTransaction")]
-    public async Task<ActionResult<Transaction>> PostTransaction([FromBody]Transaction transaction)
+    public async Task<ActionResult<Transaction>> PostTransaction([FromBody]TransactionDto transactionDto)
     {
         using (MoniWatchIContext db = new())
         {
+            // Create real transaction
+            Transaction transaction = new();
+            // Link all tags
+            List<Tag> tags = new();
+            foreach(int tagId in transactionDto.Tags)
+            {
+                Tag tag = await db.Tags.FindAsync(tagId);
+                tags.Add(tag);
+            }
+            transaction.TransactionLabel = transactionDto.TransactionLabel;
+            transaction.TransactionDate = transactionDto.TransactionDate;
+            transaction.TransactionAmount = transactionDto.TransactionAmount;
+            transaction.BankAccountId = transactionDto.BankAccountId;
+            transaction.TransactionDescription = transactionDto.TransactionDescription;
+            transaction.Tags = tags;
             // Add transaction
             db.Transactions.Add(transaction);
             await db.SaveChangesAsync();
@@ -92,6 +106,8 @@ public class TransactionController : ControllerBase
             {
                 return NotFound("Account not found");
             }
+
+            
             await db.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetTransaction), new {transactionId = transaction.TransactionId}, transaction);
