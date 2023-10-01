@@ -156,13 +156,6 @@ public class TransactionController : ControllerBase
                 return BadRequest("This transaction is not linked to any account");
             }
             // Update
-            // // Link all tags
-            // List<Tag> tags = new();
-            // foreach(int tagId in transactionDto.Tags)
-            // {
-            //     Tag tag = await db.Tags.FindAsync(tagId);
-            //     tags.Add(tag);
-            // }
             transaction.TransactionLabel = transactionDto.TransactionLabel;
             transaction.TransactionDate = transactionDto.TransactionDate;
             transaction.TransactionAmount = transactionDto.TransactionAmount;
