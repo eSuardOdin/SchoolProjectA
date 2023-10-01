@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using MySqlConnector;
 using Microsoft.EntityFrameworkCore;
 using MoniWatchIApI;
 using MoniWatchIApI.DTO;
@@ -139,7 +140,7 @@ public class TransactionController : ControllerBase
     /// <returns>Status code</returns>
     [HttpPatch]
     [Route("{transactionId}")]
-    public async Task<ActionResult<Transaction>> UpdateTransactionAmount(int transactionId, [FromBody]TransactionDto transactionDto)
+    public async Task<ActionResult<Transaction>> UpdateTransaction(int transactionId, [FromBody]TransactionDto transactionDto)
     {
         using (MoniWatchIContext db = new())
         {
@@ -155,13 +156,13 @@ public class TransactionController : ControllerBase
                 return BadRequest("This transaction is not linked to any account");
             }
             // Update
-            // Link all tags
-            List<Tag> tags = new();
-            foreach(int tagId in transactionDto.Tags)
-            {
-                Tag tag = await db.Tags.FindAsync(tagId);
-                tags.Add(tag);
-            }
+            // // Link all tags
+            // List<Tag> tags = new();
+            // foreach(int tagId in transactionDto.Tags)
+            // {
+            //     Tag tag = await db.Tags.FindAsync(tagId);
+            //     tags.Add(tag);
+            // }
             transaction.TransactionLabel = transactionDto.TransactionLabel;
             transaction.TransactionDate = transactionDto.TransactionDate;
             transaction.TransactionAmount = transactionDto.TransactionAmount;
@@ -171,6 +172,57 @@ public class TransactionController : ControllerBase
             return Ok($"Transaction '{transaction.TransactionLabel} modified'");
         }
     }
+    
+//-------------------------------------------------------------------------------------------------------
+    // OWNED OBJECTS
 
+    [HttpPatch]
+    [Route("{transactionId}/tag/{tagId}")]
+    public async Task<ActionResult<Transaction>> AddTag(int transactionId, int tagId)
+    {
+        using(MoniWatchIContext db = new())
+        {
+            Transaction? transaction = await db.Transactions.FindAsync(transactionId);
+            Tag? tag = await db.Tags.FindAsync(tagId);
+            if(transaction is null) return BadRequest("This transaction does not exists");
+            if(tag is null) return BadRequest("This tag does not exists");
+            transaction.Tags.Add(tag);
+            
+            await db.SaveChangesAsync();
+            return Ok($"Transaction '{transaction.TransactionLabel}' modified");
+        }
+    }
+
+
+// USING ADO.NET
+    [HttpDelete]
+    [Route("{transactionId}/tag/{tagId}")]
+    public async Task<ActionResult<Transaction>> RemoveTag(int transactionId, int tagId)
+    {
+        using(MoniWatchIContext db = new())
+        {
+            Transaction? transaction = await db.Transactions.FindAsync(transactionId);
+            Tag? tag = await db.Tags.FindAsync(tagId);
+            if(transaction is null) return BadRequest("This transaction does not exists");
+            if(tag is null) return BadRequest("This tag does not exists");
+            transaction.Tags.Remove(tag);
+
+            
+            await db.SaveChangesAsync();
+            //return Ok($"Transaction '{transaction.TransactionLabel} modified'");
+        }
+        var connectionString = "server=localhost;user=wan;password=CnamOcc34!;database=MoniWatchI";
+        await using var connection = new MySqlConnection(connectionString);
+        await connection.OpenAsync();
+        using(var cmd = new MySqlCommand())
+        {
+            cmd.Connection = connection;
+            cmd.CommandText = "DELETE FROM Tags_Transactions WHERE TransactionId = (@tran) AND TagId = (@tag)";
+            cmd.Parameters.AddWithValue("tran", transactionId);
+            cmd.Parameters.AddWithValue("tag", tagId);
+            await cmd.ExecuteNonQueryAsync();
+            return Ok($"Tag {tagId} deleted from transaction {transactionId}");
+        }
+    }
 
 }
