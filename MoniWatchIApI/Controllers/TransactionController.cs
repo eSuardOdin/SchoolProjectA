@@ -44,6 +44,65 @@ public class TransactionController : ControllerBase
         }
     }
 
+    // o-------------------------o
+    // | GET TAGGED TRANSACTIONS |
+    // o-------------------------o
+    [HttpGet]
+    [Route("GetTagged")]
+    public async Task<IEnumerable<Transaction>> GetTaggedTransaction(int tagId)
+    {
+        // Get tagged transactionId
+        List<int>? transacIds = new();
+        List<Transaction>? transactions = new(); 
+        var connectionString = "server=localhost;user=wan;password=CnamOcc34!;database=MoniWatchI";
+        await using var connection = new MySqlConnection(connectionString);
+        await connection.OpenAsync();
+        using(var cmd = new MySqlCommand())
+        {
+            cmd.Connection = connection;
+            cmd.CommandText = "SELECT * FROM Tags_Transactions WHERE TagId = (@tag)";
+            cmd.Parameters.AddWithValue("tag", tagId);
+            
+            using(var reader = await cmd.ExecuteReaderAsync())
+            {
+                while(await reader.ReadAsync())
+                {
+                    int transactionId = reader.GetInt32(reader.GetOrdinal("transactionId"));
+                    transacIds.Add(transactionId);
+                }
+            }
+        }
+        // Get transactions
+        if(transacIds.Count() != 0)
+        {
+            using (MoniWatchIContext db = new())
+            {
+                foreach(var t in transacIds)
+                {
+                    Transaction transaction = await db.Transactions.FindAsync(t);
+                    transactions.Add(transaction);
+                }
+            }
+        }
+        return transactions;
+    }
+/*
+    [HttpGet]
+    [Route("GetDated")]
+    public async Task<IEnumerable<Transaction>> GetDated(DateTime startDate, DateTime endDate = null)
+    {
+        List<Transaction> transactions = new();
+        using(MoniWatchIContext db = new())
+        {
+
+        }
+    }
+*/
+    // o-------------------------o
+    // | GET TRANSACTIONS BY DATE|
+    // o-------------------------o
+
+
 
     // o----------------------o
     // | POST NEW TRANSACTION |
@@ -217,5 +276,8 @@ public class TransactionController : ControllerBase
             return Ok($"Tag {tagId} deleted from transaction {transactionId}");
         }
     }
+
+    
+    
 
 }

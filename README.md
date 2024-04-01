@@ -149,7 +149,3 @@ Je vais dans le sens BDD -> Code (reverse engineering)
 
 - Etape 4 : Création de l'API avec : https://learn.microsoft.com/fr-fr/aspnet/core/tutorials/first-web-api?view=aspnetcore-7.0&tabs=visual-studio-code
 	En parallèle, trust le certificat : https://learn.microsoft.com/en-gb/aspnet/core/security/enforcing-ssl?view=aspnetcore-7.0&tabs=visual-studio%2Clinux-ubuntu#ssl-linux
-
-
-
-**J'ai "terminé" l'api, je mettrai ce readme à jour bientôt**

@@ -56,6 +56,20 @@ public class MoniController : ControllerBase
     }
 
 
+    
+    //---------------------
+    // TEST
+    //---------------------
+
+    [HttpGet]
+    [Route("{name}/hello")]
+    public async Task<ActionResult<string>> SayHello(string name)
+    {
+	using (MoniWatchIContext db = new())
+	{
+	    return Ok($"hello {name}");
+	}
+    }
 
     // o-----------o
     // | POST MONI | 
@@ -80,7 +94,7 @@ public class MoniController : ControllerBase
             db.Monis.Add(moni);
             await db.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetMoni), new {moniLogin = moni.MoniLogin}, moni);
+            return Ok($"moni {moni.MoniLogin} created");
 
         } 
     }
